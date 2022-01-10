@@ -1,0 +1,15 @@
+//TESTNET
+//Alice
+address = "3MvasVWNoyFQTenxtVJkcLRfcPshL6RiHB6"
+pubKey = "9XctFicGcwU6XRa7uHETrLtgpnJnhKEyoTGrpWtbH4Gm"
+privateKey = ""
+
+//Bob
+address = "3N65E1rYWAxQMCLg27pRxBFtAt3bPcH3pys"
+pubKey = "HUBVsBcuExqVSbV3mSVhpdKfgihF2nwdtpGmpVLRwxEN"
+privateKey = ""
+
+//Eric
+address = "3N6qANATfYJFY1hM9Bu9ACAHMQY3Q1dRTVM"
+pubKey = "8haEN2a7ZmkzawLmnr5rFX14X1oHi5kjt8NQUDNjSDLG"
+privateKey = ""

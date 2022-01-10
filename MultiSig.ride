@@ -1,0 +1,36 @@
+{-# STDLIB_VERSION 4 #-}
+{-# CONTENT_TYPE DAPP #-}
+{-# SCRIPT_TYPE ACCOUNT #-}
+
+#Using testnet
+#Alice account: https://testnet.wavesexplorer.com/address/3MvasVWNoyFQTenxtVJkcLRfcPshL6RiHB6
+
+#For Alice account
+let alicePubKey = base58'HxtsXAKo7k2EM5vvWiqRJHGy6cSc8pxWDEpQJhVYJXsa'
+let bobPubKey = base58'HUBVsBcuExqVSbV3mSVhpdKfgihF2nwdtpGmpVLRwxEN'
+let ericPubKey = base58'8haEN2a7ZmkzawLmnr5rFX14X1oHi5kjt8NQUDNjSDLG'
+
+#How many signatures are needed for validation transaction
+let multiSigCount = 2
+
+#Check if given publicKey is present in proofs array of given transaction in any order, returns bool
+func checkSign(tx: Transaction, pubKey: ByteVector) = {
+    if(sigVerify(tx.bodyBytes, tx.proofs[0], pubKey) || sigVerify(tx.bodyBytes, tx.proofs[1], pubKey) || sigVerify(tx.bodyBytes, tx.proofs[2], pubKey)) then 1 else 0
+}
+
+#Check proofs for all 3 accounts public keys. Returns summ of them
+func getMultiSigValue(tx: Transaction) = {
+    let aliceSig = checkSign(tx, alicePubKey)
+    let bobSig = checkSign(tx, bobPubKey)
+    let ericSig = checkSign(tx, ericPubKey)
+    aliceSig + bobSig + ericSig
+}
+
+@Verifier(tx)
+func verify() = {
+    match tx {
+        case t: SetScriptTransaction => sigVerify(t.bodyBytes, t.proofs[0], alicePubKey) #allow changing account script for alice(owner)
+        case td: TransferTransaction => getMultiSigValue(td) >= multiSigCount #check if accounts proof count matches predefined parameter
+        case _ => false #deny all other transactions???
+      }
+}
